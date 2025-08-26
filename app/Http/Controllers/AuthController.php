@@ -69,7 +69,11 @@ class AuthController extends Controller
         if(!$user){
             return response()->json(['error' => 'User not authenticated'], 401);
         }
-        $user->currentAccessToken()->delete();
+        try {
+            $user->currentAccessToken()->delete();
         return response()->json(['message' => 'Logged out successfully'], 200);
+        } catch (\Exception $exception) {
+           return response()->json(['error' => 'Something went wrong'], 500);
+        }
     }
 }
